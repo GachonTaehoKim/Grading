@@ -15,12 +15,15 @@ Algorithm:
 				3-1 과제의 갯수는 변동할 수 있다.
 			4. 결과를 출력한다.
 
+version 0.0.2 
+			vector 타입을 사용하여 데이터 집단 다루기
 */
 
 #include <iostream>
 #include <iomanip>
 #include <ios>
 #include <String>
+#include <vector>
 
 using std::cout; using std::cin;
 using std::endl; using std::string;
