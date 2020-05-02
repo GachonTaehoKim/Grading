@@ -8,12 +8,13 @@ Algorithm:
 			중간고사 20%
 			기말고사 40% 
 			과제점수 40%
-
+			 
 			1. 학생의 이름을 입력받음
 			2. 중간고사, 기말고사 점수를 입력받음
 			3. 과제점수를 입력받음
 				3-1 과제의 갯수는 변동할 수 있다.
 			4. 결과를 출력한다.
+
 */
 
 #include <iostream>
@@ -40,8 +41,7 @@ int main()
 	cin >> mid >> fin;
 
 	//3. 과제 점수를 입력받음
-	cout << "Enter all your homwork grades, "
-		"followed by end of file: crtl + c";
+	cout << "Enter all your homwork grades, followed by end of file: crtl + c";
 
 	int numOfHw = 0;
 	double sumHw = 0;
