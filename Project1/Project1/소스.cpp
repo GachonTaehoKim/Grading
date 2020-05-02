@@ -15,25 +15,12 @@ Algorithm:
 				3-1 과제의 갯수는 변동할 수 있다.
 			4. 결과를 출력한다.
 
-version 0.0.2 
-			vector 타입을 사용하여 데이터 집단 다루기
+version 1.0.0
+		- 구조체를 사용하여 여러명의 학생의 정보를 다룸
+		- 구조체 사용에 따른 함수 매개변수 변경
 
-version 0.0.3
-			함수를 추가하여 구현하기
-
-			+추가된 함수
-			1.double median(vector<double> homework);
-				- 입력받는 숙제점수(집단 데이터)의 중앙값을 구하는 함수
-
-			2.double grade(double mid, double fin, double homwork);
-			3.double grade(double mid, double fin, const vector<double>&);
-				- 최종적인 점수를 반환하는 함수
-		
-			4.istream& read_hw(istream& in, vector<double>& homework);
-				- 숙제점수를 읽는 함수
-				
 */
-#include <algorithm>//sorting
+#include <algorithm>
 #include <iomanip>
 #include <ios>
 #include <iostream>
@@ -46,6 +33,14 @@ using std::cout; using std::cin;
 using std::endl; using std::string;
 using std::streamsize; using std::setprecision;
 using std::domain_error; using std::istream;
+using std::max;
+
+/* 구조체 */
+struct Student_info {
+	string name;
+	double mid, fin;
+	vector<double> homework;
+};
 
 /* 함수 */
 double median(vector<double> homework) {
@@ -58,6 +53,7 @@ double median(vector<double> homework) {
 	vec_sz mid = size / 2;
 	return size % 2 == 0 ? (homework[mid] + homework[mid - 1]) / 2 : homework[mid];
 }
+
 
 double grade(double mid, double fin, double homwork) {
 	return 0.2 * mid + 0.4 * fin + 0.4 * homwork;
@@ -87,41 +83,52 @@ istream& read_hw(istream& in, vector<double>& homework) {
 	return in;
 }
 
+//ver 1.0.0 추가 함수
+istream& read(istream& is, Student_info& s) {
+	//학생의 이름, 중간/기말 점수를 읽어 저장
+	is >> s.name >> s.mid >> s.fin;
+	read_hw(is, s.homework);
+	return is;
+}
+bool compare(const Student_info& x, const Student_info& y) {
+	return x.name < y.name;
+}
+
+//Overloading 
+double grade(const Student_info& s) {
+	return grade(s.mid, s.fin, s.homework);
+}
+
 int main()
 {
-	//1. 이름을 입력받음
-	cout << "Please enter your first name: ";
-	string name;
-	cin >> name;
-	cout << "Hello, " << name << "!" << endl;
+	vector<Student_info> students;
+	Student_info record;
+	string::size_type maxlen = 0;
 
-	//2. 중간고사, 기말고사 성적을 입력받음
-	cout << "Please enter midterm and final exam grades: ";
-	double mid, fin;
-	cin >> mid >> fin;
+	//학생 이름과 모든 점수를 읽어 저장하고 가장 긴 이름을 찾음.
+	while (read(cin, record)) {
+		maxlen = max(maxlen, record.name.size());
+		students.push_back(record);
+	}
 
-	//3. 과제 점수를 입력받음
-	cout << "Enter all your homwork grades, followed by end of file: crtl + c";
-
-	//숙제점수를 저장하는 vector 
-	vector<double> homework;
-
-	read_hw(cin, homework);
-
-	//종합점수를 계산해 생성
-	try {
-		double fin_grade = grade(mid, fin, homework);
-		streamsize prec = cout.precision(3);//소수점 세자리까지 출력
-
-		cout << name << "'s grade is " << setprecision(3)
-			<< fin_grade << setprecision(prec) << endl;
-	}//try ends
-	catch (domain_error) {
-		cout << endl << "You must enter your grades."
-			"\nPlease try again." << endl;
-		return 1;
-	}//catch ends
-	
+	//학생 정보를 알파벳 순으로 정렬
+	sort(students.begin(), students.end(), compare);
+	for (vector<Student_info>::size_type i = 0; i != students.size(); ++i) {
+		//이름과 오른쪽 공백을 포함하여 maxlen + 1 개의 문자를 출력
+		cout << students[i].name << string(maxlen + 1 - students[i].name.size(), ' ');
+		
+		//최종 점수를 계산하여 출력
+		try {
+			double final_grade = grade(students[i]);
+			streamsize prec = cout.precision();
+			cout << setprecision(3) << final_grade << setprecision(prec);
+		}
+		catch (domain_error e) {
+			cout << e.what();
+		}
+		cout << endl;
+	}
 	return 0;
 }
 
+ 
