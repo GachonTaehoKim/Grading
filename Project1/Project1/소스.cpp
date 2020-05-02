@@ -41,8 +41,7 @@ int main()
 	cin >> mid >> fin;
 
 	//3. 과제 점수를 입력받음
-	cout << "Enter all your homwork grades, "
-		"followed by end of file: crtl + c";
+	cout << "Enter all your homwork grades, followed by end of file: crtl + c";
 
 	int numOfHw = 0;
 	double sumHw = 0;
